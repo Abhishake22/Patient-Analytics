@@ -1,0 +1,8 @@
+2.Case statement
+
+---Create a report showing patient names, visit dates, and a column indicating whether the patient's diagnosis is "Hypertension" or not.
+
+SELECT p.patient_name,v.visit_date,CASE WHEN diagnosis = 'Hypertension' then 'Yes' ELSE 'No' END AS Hypertension
+FROM patients p
+JOIN visits v
+ON p.patient_id = v.patient_id
