@@ -1,0 +1,43 @@
+---Scenario 1: Nested Subqueries
+---Retrieve the names of patients who have had visits with a cost greater than the average cost of all visits.
+
+Table name:
+
+Patients:
+
+patient_id	patient_name	birthdate	gender	insurance_type
+1	John Doe	1980-05-15	Male	Private
+2	Jane Smith	1992-11-20	Female	Medicaid
+3	Bob Johnson	1975-07-10	Male	Medicare
+4	Alice Brown	1988-03-08	Female	Private
+
+Visits:
+
+visit_id	patient_id	visit_date	diagnosis	cost
+101	1	2023-08-15	Hypertension	150
+102	2	2023-08-18	Diabetes	200
+103	1	2023-08-20	Headache	80
+104	3	2023-08-22	Arthritis	300
+105	2	2023-08-25	Sinusitis	120
+106	1	2023-08-28	Hypertension	180
+
+Query:
+
+SELECT patient_name
+FROM patients p
+JOIN (SELECT patient_id,cost,AVG(cost) OVER () AS Average_cost
+FROM visits
+) v
+ON p.patient_id = v.patient_id
+WHERE v.cost > v.Average_cost
+
+
+Using Nested Subquery:
+
+SELECT patient_name
+FROM patients
+WHERE patient_id IN (
+SELECT patient_id
+FROM visits
+WHERE cost > (SELECT AVG(cost) FROM visits)
+)
